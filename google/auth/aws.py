@@ -463,9 +463,7 @@ class Credentials(external_account.Credentials):
         if request is not None:
             headers = {"X-aws-ec2-metadata-token-ttl-seconds": "21600"}
             session_token = request(
-                url=self._aws_token_url,
-                method="PUT",
-                headers=headers,
+                url=self._aws_token_url, method="PUT", headers=headers
             )
         else:
             session_token = None
@@ -478,7 +476,9 @@ class Credentials(external_account.Credentials):
 
         # Retrieve the AWS security credentials needed to generate the signed
         # request.
-        aws_security_credentials = self._get_security_credentials(request, session_token)
+        aws_security_credentials = self._get_security_credentials(
+            request, session_token
+        )
         # Generate the signed request to AWS STS GetCallerIdentity API.
         # Use the required regional endpoint. Otherwise, the request will fail.
         request_options = self._request_signer.get_request_options(
@@ -556,11 +556,7 @@ class Credentials(external_account.Credentials):
             raise exceptions.RefreshError("Unable to determine AWS region")
 
         headers = {"X-aws-ec2-metadata-token": session_token}
-        response = request(
-            url=self._region_url,
-            method="GET",
-            headers=headers,
-        )
+        response = request(url=self._region_url, method="GET", headers=headers)
 
         # Support both string and bytes type response.data.
         response_body = (
@@ -616,7 +612,9 @@ class Credentials(external_account.Credentials):
         role_name = self._get_metadata_role_name(request, session_token)
 
         # Get security credentials.
-        credentials = self._get_metadata_security_credentials(request, role_name, session_token)
+        credentials = self._get_metadata_security_credentials(
+            request, role_name, session_token
+        )
 
         return {
             "access_key_id": credentials.get("AccessKeyId"),
@@ -647,7 +645,8 @@ class Credentials(external_account.Credentials):
         """
         headers = {
             "Content-Type": "application/json",
-            "X-aws-ec2-metadata-token": session_token}
+            "X-aws-ec2-metadata-token": session_token,
+        }
         response = request(
             url="{}/{}".format(self._security_credentials_url, role_name),
             method="GET",
@@ -696,9 +695,7 @@ class Credentials(external_account.Credentials):
 
         headers = {"X-aws-ec2-metadata-token": session_token}
         response = request(
-            url=self._security_credentials_url,
-            method="GET",
-            headers=headers,
+            url=self._security_credentials_url, method="GET", headers=headers
         )
 
         # support both string and bytes type response.data

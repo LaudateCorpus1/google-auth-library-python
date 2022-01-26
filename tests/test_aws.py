@@ -667,7 +667,7 @@ class TestCredentials(object):
         """
         responses = []
         if session_token_status:
-            #AWS session token request
+            # AWS session token request
             responses.append(session_token_data)
 
         if region_status:
@@ -744,7 +744,9 @@ class TestCredentials(object):
         )
 
     @classmethod
-    def assert_aws_metadata_request_kwargs(cls, request_kwargs, url, headers=None, method="GET"):
+    def assert_aws_metadata_request_kwargs(
+        cls, request_kwargs, url, headers=None, method="GET"
+    ):
         assert request_kwargs["url"] == url
         # All used AWS metadata server endpoints use GET HTTP method.
         assert request_kwargs["method"] == method
@@ -986,25 +988,28 @@ class TestCredentials(object):
             request.call_args_list[0][1],
             SESSION_TOKEN_URL,
             {"X-aws-ec2-metadata-token-ttl-seconds": "21600"},
-            "PUT"
+            "PUT",
         )
         # Assert region request.
         self.assert_aws_metadata_request_kwargs(
             request.call_args_list[1][1],
             REGION_URL,
-            {"X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN}
+            {"X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN},
         )
         # Assert role request.
         self.assert_aws_metadata_request_kwargs(
             request.call_args_list[2][1],
             SECURITY_CREDS_URL,
-            {"X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN}
+            {"X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN},
         )
         # Assert security credentials request.
         self.assert_aws_metadata_request_kwargs(
             request.call_args_list[3][1],
             "{}/{}".format(SECURITY_CREDS_URL, self.AWS_ROLE),
-            {"Content-Type": "application/json", "X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN},
+            {
+                "Content-Type": "application/json",
+                "X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN,
+            },
         )
 
         # Retrieve subject_token again. Region should not be queried again.
@@ -1026,19 +1031,22 @@ class TestCredentials(object):
             request.call_args_list[0][1],
             SESSION_TOKEN_URL,
             {"X-aws-ec2-metadata-token-ttl-seconds": "21600"},
-            "PUT"
+            "PUT",
         )
         # Assert role request.
         self.assert_aws_metadata_request_kwargs(
             new_request.call_args_list[1][1],
             SECURITY_CREDS_URL,
-            {"X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN}
+            {"X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN},
         )
         # Assert security credentials request.
         self.assert_aws_metadata_request_kwargs(
             new_request.call_args_list[2][1],
             "{}/{}".format(SECURITY_CREDS_URL, self.AWS_ROLE),
-            {"Content-Type": "application/json", "X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN},
+            {
+                "Content-Type": "application/json",
+                "X-aws-ec2-metadata-token": self.AWS_SESSION_TOKEN,
+            },
         )
 
     @mock.patch("google.auth._helpers.utcnow")
@@ -1193,7 +1201,8 @@ class TestCredentials(object):
         request = self.make_mock_request(
             region_status=http_client.BAD_REQUEST,
             session_token_status=http_client.OK,
-            session_token_data=self.AWS_SESSION_TOKEN,)
+            session_token_data=self.AWS_SESSION_TOKEN,
+        )
         credentials = self.make_credentials(credential_source=self.CREDENTIAL_SOURCE)
 
         with pytest.raises(exceptions.RefreshError) as excinfo:
@@ -1547,7 +1556,8 @@ class TestCredentials(object):
         request = self.make_mock_request(
             region_status=http_client.BAD_REQUEST,
             session_token_status=http_client.OK,
-            session_token_data=self.AWS_SESSION_TOKEN,)
+            session_token_data=self.AWS_SESSION_TOKEN,
+        )
         credentials = self.make_credentials(credential_source=self.CREDENTIAL_SOURCE)
 
         with pytest.raises(exceptions.RefreshError) as excinfo:
