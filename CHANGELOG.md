@@ -4,6 +4,13 @@
 
 [1]: https://pypi.org/project/google-auth/#history
 
+## [2.6.0](https://github.com/googleapis/google-auth-library-python/compare/v2.5.0...v2.6.0) (2022-01-29)
+
+
+### Features
+
+* ADC can load an impersonated service account credentials. ([#962](https://github.com/googleapis/google-auth-library-python/issues/962)) ([52c8ef9](https://github.com/googleapis/google-auth-library-python/commit/52c8ef90058120d7d04d3d201adc111664be526c))
+
 ## [2.5.0](https://github.com/googleapis/google-auth-library-python/compare/v2.4.1...v2.5.0) (2022-01-25)
 
 
